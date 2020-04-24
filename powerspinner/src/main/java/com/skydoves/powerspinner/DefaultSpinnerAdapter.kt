@@ -21,52 +21,53 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.item_default.view.item_default_text
+import kotlinx.android.synthetic.main.item_default.view.*
 
 /** DefaultSpinnerAdapter is a default adapter composed of string items. */
 class DefaultSpinnerAdapter(
-  powerSpinnerView: PowerSpinnerView
+        powerSpinnerView: PowerSpinnerView
 ) : RecyclerView.Adapter<DefaultSpinnerAdapter.DefaultSpinnerViewHolder>(),
-  PowerSpinnerInterface<String> {
+        PowerSpinnerInterface<String> {
 
-  override val spinnerView: PowerSpinnerView = powerSpinnerView
-  override var onSpinnerItemSelectedListener: OnSpinnerItemSelectedListener<String>? = null
+    override val spinnerView: PowerSpinnerView = powerSpinnerView
+    override var onSpinnerItemSelectedListener: OnSpinnerItemSelectedListener<String>? = null
 
-  private val spinnerItems: MutableList<String> = arrayListOf()
+    private val spinnerItems: MutableList<String> = arrayListOf()
 
-  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DefaultSpinnerViewHolder {
-    val layoutInflater = LayoutInflater.from(parent.context)
-    return DefaultSpinnerViewHolder(layoutInflater.inflate(R.layout.item_default, parent, false))
-  }
-
-  override fun onBindViewHolder(holder: DefaultSpinnerViewHolder, position: Int) {
-    val item = this.spinnerItems[position]
-    holder.itemView.apply {
-      item_default_text.apply {
-        text = item
-        typeface = spinnerView.typeface
-        gravity = spinnerView.gravity
-        setTextSize(TypedValue.COMPLEX_UNIT_PX, spinnerView.textSize)
-        setTextColor(spinnerView.currentTextColor)
-      }
-      setPadding(spinnerView.paddingLeft, spinnerView.paddingTop, spinnerView.paddingRight,
-        spinnerView.paddingBottom)
-      setOnClickListener { notifyItemSelected(position) }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DefaultSpinnerViewHolder {
+        val layoutInflater = LayoutInflater.from(parent.context)
+        return DefaultSpinnerViewHolder(layoutInflater.inflate(R.layout.item_default, parent, false))
     }
-  }
 
-  override fun setItems(itemList: List<String>) {
-    this.spinnerItems.clear()
-    this.spinnerItems.addAll(itemList)
-    notifyDataSetChanged()
-  }
+    override fun onBindViewHolder(holder: DefaultSpinnerViewHolder, position: Int) {
+        val item = this.spinnerItems[position]
+        holder.itemView.apply {
+            item_default_text.apply {
+                text = item
+                typeface = spinnerView.typeface
+                gravity = spinnerView.gravity
+                setTextSize(TypedValue.COMPLEX_UNIT_PX, spinnerView.textSize)
+                setTextColor(spinnerView.currentTextColor)
+                setPadding(spinnerView.paddingLeft, spinnerView.paddingTop, spinnerView.paddingRight,
+                        spinnerView.paddingBottom)
+            }
 
-  override fun notifyItemSelected(index: Int) {
-    this.spinnerView.notifyItemSelected(index, this.spinnerItems[index])
-    this.onSpinnerItemSelectedListener?.onItemSelected(index, this.spinnerItems[index])
-  }
+            setOnClickListener { notifyItemSelected(position) }
+        }
+    }
 
-  override fun getItemCount() = this.spinnerItems.size
+    override fun setItems(itemList: List<String>) {
+        this.spinnerItems.clear()
+        this.spinnerItems.addAll(itemList)
+        notifyDataSetChanged()
+    }
 
-  class DefaultSpinnerViewHolder(view: View) : RecyclerView.ViewHolder(view)
+    override fun notifyItemSelected(index: Int) {
+        this.spinnerView.notifyItemSelected(index, this.spinnerItems[index])
+        this.onSpinnerItemSelectedListener?.onItemSelected(index, this.spinnerItems[index])
+    }
+
+    override fun getItemCount() = this.spinnerItems.size
+
+    class DefaultSpinnerViewHolder(view: View) : RecyclerView.ViewHolder(view)
 }
